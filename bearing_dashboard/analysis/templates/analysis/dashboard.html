@@ -1,0 +1,297 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bearing Analysis Dashboard</title>
+    <link rel="stylesheet" href="{% static 'analysis/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'analysis/css/plotly_plots.css' %}">
+    <link rel="stylesheet" href="{% static 'analysis/css/fft_analysis_results.css' %}">
+    <link rel="stylesheet" href="{% static 'analysis/css/degradation_analysis.css' %}">
+    <link rel="stylesheet" href="{% static 'analysis/css/prediction_analysis.css' %}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header section with title and alerts -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <h1>Vibration Analysis Dashboard</h1>
+            </div>
+            
+            <!-- Critical Alerts Section -->
+            <div class="alerts-section">
+                <h2>Critical Alerts</h2>
+                <div class="alert-badges">
+                    <span class="alert-badge critical">4 Bearings Failed</span>
+                </div>
+            </div>
+
+            <h3 class="section-description">Time-based vibration analysis revealing the progression of 4 distinct bearing failures, showcasing the journey from early warning signs to critical failure states.</h3>
+        </header>
+        <!-- Raw Signals Section goes here -->
+        <section class="dashboard-section full-width">
+            <h2>Raw Channel Signals - Failing Bearings</h2>
+            <p class="section-description">
+                Time-domain plots showing the evolution of vibration patterns throughout each bearing's lifetime. As failures develop, these raw signals capture the increasing intensity and complexity of bearing vibrations, providing our first insight into the failure process.
+            </p>
+            <div class="plot-container">
+                {% for raw in content.raw %}
+                    {% include 'analysis/raw_signals/'|add:raw %}
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- FFT Analysis Section -->
+        <section class="dashboard-section full-width">
+            <h2>Frequency Domain Analysis (FFT)</h2>
+            <p class="section-description">
+                Through Fast Fourier Transform analysis, we convert these complex time signals into clear frequency patterns. This transformation reveals specific frequency signatures associated with each type of bearing failure that help us identify and track different failure modes.
+            </p>
+            <div class="plot-container">
+                {% for fft in content.fft %}
+                    {% include 'analysis/fft_analysis/'|add:fft %}
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- FFT Analysis Results Section -->
+        <section class="dashboard-section full-width">
+            <h2>FFT Analysis Results</h2>
+            <p class="section-description">
+                Detailed examination of frequency components reveals how different types of bearing damage manifest in specific frequency bands. Inner race failures show distinct high-frequency patterns, roller element failures dominate mid-frequencies, and outer race failures display unique patterns across all bands.
+            </p>
+            <div class="json-container">
+                {% for set_name, set_data in content.bearing_analysis_results.items %}
+                    <div class="set-container">
+                        <h3>{{ set_name|title }}</h3>
+                        {% for bearing_name, bearing_data in set_data.items %}
+                            <div class="bearing-container">
+                                <h4>{{ bearing_name|title }}</h4>
+                                <p class="failure-point">
+                                    Failure Point: {{ bearing_data.failure_point_percentage|floatformat:2 }}% through the dataset
+                                </p>
+                                {% for channel_name, channel_data in bearing_data.channels.items %}
+                                    <div class="channel-container">
+                                        <h5>{{ channel_name|title }}</h5>
+                                        <div class="changes-data">
+                                            <div class="magnitude-changes">
+                                                <h6>Magnitude Changes</h6>
+                                                <p>Peak: {{ channel_data.changes.magnitude.peak|floatformat:2 }}%</p>
+                                                <p>Mean: {{ channel_data.changes.magnitude.mean|floatformat:2 }}%</p>
+                                                <p>Total Energy: {{ channel_data.changes.magnitude.total_energy|floatformat:2 }}%</p>
+                                            </div>
+                                            <div class="frequency-bands">
+                                                <h6>Frequency Bands</h6>
+                                                <p>Low Band: {{ channel_data.changes.frequency_bands.low_band_change|floatformat:2 }}%</p>
+                                                <p>Mid Band: {{ channel_data.changes.frequency_bands.mid_band_change|floatformat:2 }}%</p>
+                                                <p>High Band: {{ channel_data.changes.frequency_bands.high_band_change|floatformat:2 }}%</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Filtered Signal Plot Section -->
+        <section class="dashboard-section full-width">
+            <h2>Filtered Signal Analysis</h2>
+            <p class="section-description">
+                By isolating specific frequency bands, we can track how different aspects of bearing health evolve over time. These filtered signals highlight the progression of damage, from subtle early changes to clear indicators of impending failure.
+            </p>
+            <div class="plot-container">
+                {% for filtered_plots in content.filtered_signals %}
+                    {% include 'analysis/filtered_signals/'|add:filtered_plots %}
+                {% endfor %}
+            </div>
+        </section>
+
+
+                <!-- Degradation Analysis Section -->
+        <section class="dashboard-section full-width">
+            <h2>Degradation Analysis Over Time</h2>
+            <p class="section-description">
+                Analysis of how bearing health deteriorates over time. Each failure type shows characteristic patterns - from the rapid progression of inner race failures to the more gradual development of outer race damage, giving us crucial insights for prediction.
+            </p>
+            
+            <div class="analysis-container">
+                <!-- Inner Race Analysis -->
+                <div class="failure-type">
+                    <h3>Inner Race Failure (Channels 5 & 6)</h3>
+                    
+                    <div class="analysis-block">
+                        <h4>Kurtosis Behavior</h4>
+                        <p>Analysis across frequency bands shows distinctive patterns. The low band exhibits a dramatic negative shift with late-to-baseline ratios of -23.6 for Channel 5 and +26.3 for Channel 6. The mid band shows an extreme increase, with ratios reaching 22.8 and 6.3 respectively. High band measurements indicate significant rises of 9.5 and 2.9. This asymmetric channel response strongly suggests a directional impact in the failure process.</p>
+                    </div>
+
+                    <div class="analysis-block">
+                        <h4>Stability Progression</h4>
+                        <p>The degradation follows a clear three-stage pattern. Early stages show remarkable stability (0.001-0.005), followed by slight deterioration in the mid stage (0.001-0.02). The late stage exhibits dramatic instability, particularly in the mid band (4.17 Ch5, 1.68 Ch6) and high band (2.22 Ch5, 1.17 Ch6).</p>
+                    </div>
+
+                    <div class="analysis-block">
+                        <h4>Rate Changes</h4>
+                        <p>Initial stages show minimal change (0.0001-0.0004), but the late stage demonstrates significant acceleration, with peak rates in the high band (0.0798 Ch5, 0.0487 Ch6), consistently observed across both channels.</p>
+                    </div>
+                </div>
+
+                <!-- Roller Element Analysis -->
+                <div class="failure-type">
+                    <h3>Roller Element Failure (Channels 7 & 8)</h3>
+                    
+                    <div class="analysis-block">
+                        <h4>Mid-Band Dominance</h4>
+                        <p>Peak values show extreme increases with late-to-baseline ratios of 3.57 (Ch7) and 2.52 (Ch8), marking the highest among all failure types. Kurtosis measurements reveal massive spikes (24.8 Ch7, 4.98 Ch8) accompanied by the highest observed stability deterioration (14.69 Ch7, 7.47 Ch8).</p>
+                    </div>
+
+                    <div class="analysis-block">
+                        <h4>Rate Characteristics</h4>
+                        <p>A distinctive feature is the unique negative-to-positive rate transitions. Late stage analysis reveals the highest rates across all measurements, notably in the kurtosis rate (2.67 in Ch7 mid band) and crest factor rate (0.53 in Ch7 mid band).</p>
+                    </div>
+                </div>
+
+                <!-- Outer Race Analysis -->
+                <div class="failure-type">
+                    <h3>Outer Race Failure</h3>
+                    
+                    <div class="analysis-block">
+                        <h4>Set 2 (Channel 1)</h4>
+                        <p>High Band RMS shows the largest increase with a late-to-baseline ratio of 2.10. Uniquely, the crest factor demonstrates a decrease in the late stage (0.84-0.93). Rate patterns show a distinctive reversal, transitioning from positive in early stages to negative in late stages.</p>
+                    </div>
+
+                    <div class="analysis-block">
+                        <h4>Set 3 (Channel 3)</h4>
+                        <p>Changes are more modest overall, though high band RMS still shows significant increase (1.71). Notably, this failure type maintains the most consistent stability across all stages and exhibits the smallest rate changes among all failure types.</p>
+                    </div>
+                </div>
+
+                <!-- Cross-Type Comparison -->
+                <div class="failure-type">
+                    <h3>Critical Cross-Type Comparisons</h3>
+                    
+                    <div class="analysis-block">
+                        <h4>Most Reliable Detection Features</h4>
+                        <p>Each failure type presents distinct identifying characteristics: Inner Race failures are best detected through high-band stability deterioration, Roller Element failures through mid-band kurtosis spikes, and Outer Race failures through combined high-band RMS and stability patterns.</p>
+                    </div>
+
+                    <div class="analysis-block">
+                        <h4>Failure Progression Speeds</h4>
+                        <p>Inner Race failures show the fastest progression based on late-stage rate magnitudes. Outer Race Set 3 demonstrates the most gradual progression, while Roller Element failures present the most predictable pattern with clear mid-band progression.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature Correlation Matrix -->
+        <section class="dashboard-section full-width">
+            <h2>Feature Correlation Matrix</h2>
+            <p class="section-description">
+                Visualizing relationships between different vibration characteristics helps identify which features work together to signal bearing failure. Strong correlations between certain features, such as mid-band kurtosis and stability measures, provide insights into the most reliable indicators of bearing health, while negative correlations help us understand how different aspects of bearing behavior change in opposing ways during degradation.
+            </p>
+        </section>
+            </p>
+            <div class="plot-container">
+                <img class="correlation-matrix" src="{% static 'analysis/images/feature_correlation_matrix.png' %}" alt="Feature Correlation Matrix">
+            </div>
+        </section>
+
+
+        <!-- Prediction Analysis Section -->
+        <section class="dashboard-section full-width">
+            <h2>Failure Prediction Analysis</h2>
+            <p class="section-description">
+                Building on our understanding of vibration patterns and degradation rates, we predict remaining useful life for each bearing. Our model achieves high accuracy in early stages while acknowledging the increasing complexity of predictions as bearings approach failure. These predictions provide valuable insights for maintenance planning and resource allocation.
+            </p>
+
+            <div class="prediction-container">
+                <!-- Model Performance Summary -->
+                <div class="performance-summary">
+                    <h3>Overall Prediction Performance</h3>
+                    <div class="summary-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Average Accuracy:</span>
+                            <span class="stat-value">{{ content.prediction_analysis.model_performance.average_accuracy|floatformat:1 }}%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Average Error:</span>
+                            <span class="stat-value">{{ content.prediction_analysis.model_performance.average_error_days|floatformat:1 }} days</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prediction Tables -->
+                {% for bearing_name, bearing_data in content.prediction_analysis.bearing_predictions.items %}
+                <div class="bearing-predictions">
+                    <h3>{{ bearing_name }}</h3>
+                    <div class="table-wrapper">
+                        <table class="prediction-table">
+                            <thead>
+                                <tr>
+                                    <th>Life Stage</th>
+                                    <th>Actual Hours</th>
+                                    <th>Predicted Hours</th>
+                                    <th>Error (Hours)</th>
+                                    <th>Error (Days)</th>
+                                    <th>Accuracy (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for stage in bearing_data.timeline %}
+                                <tr>
+                                    <td>{{ stage.life_stage }}</td>
+                                    <td>{{ stage.predictions.actual_hours_remaining|floatformat:1 }}</td>
+                                    <td>{{ stage.predictions.predicted_hours|floatformat:1 }}</td>
+                                    <td>{{ stage.predictions.error_metrics.hours|floatformat:1 }}</td>
+                                    <td>{{ stage.predictions.error_metrics.days|floatformat:1 }}</td>
+                                    <td class="accuracy-cell {% if stage.predictions.error_metrics.accuracy_percentage < 60 %}low-accuracy{% elif stage.predictions.error_metrics.accuracy_percentage > 90 %}high-accuracy{% endif %}">
+                                        {{ stage.predictions.error_metrics.accuracy_percentage|floatformat:1 }}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Final Plots from Modeling/Prediction Section -->
+        <section class="dashboard-section full-width">
+            <h2>Prediction Plots</h2>
+            <h3>
+                Visualization of our prediction model's performance across different bearing types and failure stages, revealing both the strengths and limitations of our predictive capabilities as bearings progress toward failure.
+            <div class="plot-container">
+                <p class="misc-plot-description">Prediction Accuracy (scatter plot with perfect prediction line):
+                    Comparing predicted vs actual hours until failure, where points closer to the red dashed line indicate more accurate predictions. The scatter pattern reveals our model's stronger performance in short-term predictions (lower hours) compared to long-term forecasts, highlighting the increasing uncertainty in predictions further into the future.</p>
+                    {% include 'analysis/misc/prediction_accuracy.html' %}
+
+                <p class="misc-plot-description">Failure Timeline (multi-line plot with warning thresholds):
+                    Tracking degradation patterns across different bearing types over time, with critical thresholds marked at 7 and 15 days. This visualization shows how different bearing failures evolve, with some following gradual degradation patterns while others show more rapid deterioration near failure points.</p>
+                    {% include 'analysis/misc/failure_timeline.html' %}
+                
+                <p class="misc-plot-description">Feature Importance (horizontal bar chart):
+                    Ranking of the most influential features in our prediction model, with mid and high-frequency RMS values showing the strongest predictive power. This analysis reveals which vibration characteristics are most reliable for detecting impending bearing failures, guiding our monitoring focus.</p>
+                    {% include 'analysis/misc/feature_importance.html' %}
+
+                <p class="misc-plot-description">Time till Failure vs Error (scatter plot):
+                    Examining how prediction accuracy changes as bearings approach failure. The increasing spread of errors as time-to-failure increases demonstrates the greater challenge in making long-term predictions compared to short-term forecasts.</p>
+                    {% include 'analysis/misc/error_vs_time.html' %}
+
+                <p class="misc-plot-description">Distribution of Prediction Errors (histogram):
+                    Frequency distribution of prediction errors showing most errors clustered within the first 100 days, with occasional larger deviations. This helps understand our model's typical prediction accuracy range and identifies outlier cases.</p>
+                    {% include 'analysis/misc/error_distribution.html' %}
+
+                <p class="misc-plot-description">Bearing Status (bar chart):
+                    Current health distribution of monitored bearings, categorizing them into Critical (0-7 days), Warning (7-14 days), and Monitor (14+ days) states. This provides an immediate overview of maintenance priorities and system health status.</p>
+                    {% include 'analysis/misc/bearing_status.html' %}
+
+            </div>
+        </section>
+    </div>
+</body>
+</html>

@@ -1,0 +1,220 @@
+{
+    "model_performance": {
+        "average_accuracy": 76.11250000000001,
+        "average_error_days": 1.04375
+    },
+    "bearing_predictions": {
+        "Inner Race Failure (Set 1, Bearing 3)": {
+            "average_accuracy": 77.7,
+            "timeline": [
+                {
+                    "life_stage": "25% through life",
+                    "predictions": {
+                        "actual_hours_remaining": 271.2,
+                        "predicted_hours": 253.5,
+                        "error_metrics": {
+                            "hours": 17.7,
+                            "days": 0.7,
+                            "accuracy_percentage": 93.5
+                        }
+                    }
+                },
+                {
+                    "life_stage": "50% through life",
+                    "predictions": {
+                        "actual_hours_remaining": 179.7,
+                        "predicted_hours": 181.4,
+                        "error_metrics": {
+                            "hours": 1.7,
+                            "days": 0.1,
+                            "accuracy_percentage": 99.0
+                        }
+                    }
+                },
+                {
+                    "life_stage": "75% through life",
+                    "predictions": {
+                        "actual_hours_remaining": 88.2,
+                        "predicted_hours": 103.9,
+                        "error_metrics": {
+                            "hours": 15.8,
+                            "days": 0.7,
+                            "accuracy_percentage": 82.1
+                        }
+                    }
+                },
+                {
+                    "life_stage": "90% through life",
+                    "predictions": {
+                        "actual_hours_remaining": 34.0,
+                        "predicted_hours": 55.7,
+                        "error_metrics": {
+                            "hours": 21.7,
+                            "days": 0.9,
+                            "accuracy_percentage": 36.2
+                        }
+                    }
+                }
+            ]
+        },
+        "Roller Element Failure (Set 1, Bearing 4)": {
+            "average_accuracy": 85.05,
+            "timeline": [
+                {
+                    "life_stage": "25% through life",
+                    "predictions": {
+                        "actual_hours_remaining": 220.8,
+                        "predicted_hours": 188.0,
+                        "error_metrics": {
+                            "hours": 32.8,
+                            "days": 1.4,
+                            "accuracy_percentage": 85.1
+                        }
+                    }
+                },
+                {
+                    "life_stage": "50% through life",
+                    "predictions": {
+                        "actual_hours_remaining": 146.0,
+                        "predicted_hours": 150.5,
+                        "error_metrics": {
+                            "hours": 4.5,
+                            "days": 0.2,
+                            "accuracy_percentage": 96.9
+                        }
+                    }
+                },
+                {
+                    "life_stage": "75% through life",
+                    "predictions": {
+                        "actual_hours_remaining": 71.3,
+                        "predicted_hours": 86.9,
+                        "error_metrics": {
+                            "hours": 15.5,
+                            "days": 0.6,
+                            "accuracy_percentage": 78.2
+                        }
+                    }
+                },
+                {
+                    "life_stage": "90% through life",
+                    "predictions": {
+                        "actual_hours_remaining": 27.2,
+                        "predicted_hours": 32.6,
+                        "error_metrics": {
+                            "hours": 5.4,
+                            "days": 0.2,
+                            "accuracy_percentage": 80.0
+                        }
+                    }
+                }
+            ]
+        },
+        "Outer Race Failure (Set 2, Bearing 1)": {
+            "average_accuracy": 84.525,
+            "timeline": [
+                {
+                    "life_stage": "25% through life",
+                    "predictions": {
+                        "actual_hours_remaining": 123.0,
+                        "predicted_hours": 117.8,
+                        "error_metrics": {
+                            "hours": 5.2,
+                            "days": 0.2,
+                            "accuracy_percentage": 95.8
+                        }
+                    }
+                },
+                {
+                    "life_stage": "50% through life",
+                    "predictions": {
+                        "actual_hours_remaining": 82.0,
+                        "predicted_hours": 96.5,
+                        "error_metrics": {
+                            "hours": 14.5,
+                            "days": 0.6,
+                            "accuracy_percentage": 82.3
+                        }
+                    }
+                },
+                {
+                    "life_stage": "75% through life",
+                    "predictions": {
+                        "actual_hours_remaining": 41.0,
+                        "predicted_hours": 32.8,
+                        "error_metrics": {
+                            "hours": 8.2,
+                            "days": 0.3,
+                            "accuracy_percentage": 80.0
+                        }
+                    }
+                },
+                {
+                    "life_stage": "90% through life",
+                    "predictions": {
+                        "actual_hours_remaining": 13.7,
+                        "predicted_hours": 16.4,
+                        "error_metrics": {
+                            "hours": 2.7,
+                            "days": 0.1,
+                            "accuracy_percentage": 80.0
+                        }
+                    }
+                }
+            ]
+        },
+        "Outer Race Failure (Set 3, Bearing 3)": {
+            "average_accuracy": 57.17499999999999,
+            "timeline": [
+                {
+                    "life_stage": "25% through life",
+                    "predictions": {
+                        "actual_hours_remaining": 789.7,
+                        "predicted_hours": 815.0,
+                        "error_metrics": {
+                            "hours": 25.3,
+                            "days": 1.1,
+                            "accuracy_percentage": 96.8
+                        }
+                    }
+                },
+                {
+                    "life_stage": "50% through life",
+                    "predictions": {
+                        "actual_hours_remaining": 525.3,
+                        "predicted_hours": 480.0,
+                        "error_metrics": {
+                            "hours": 45.3,
+                            "days": 1.9,
+                            "accuracy_percentage": 91.4
+                        }
+                    }
+                },
+                {
+                    "life_stage": "75% through life",
+                    "predictions": {
+                        "actual_hours_remaining": 261.0,
+                        "predicted_hours": 294.7,
+                        "error_metrics": {
+                            "hours": 33.7,
+                            "days": 1.4,
+                            "accuracy_percentage": 87.1
+                        }
+                    }
+                },
+                {
+                    "life_stage": "90% through life",
+                    "predictions": {
+                        "actual_hours_remaining": 103.8,
+                        "predicted_hours": 256.1,
+                        "error_metrics": {
+                            "hours": 152.3,
+                            "days": 6.3,
+                            "accuracy_percentage": -46.6
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

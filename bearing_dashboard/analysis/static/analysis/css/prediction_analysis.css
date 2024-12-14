@@ -1,0 +1,101 @@
+/* Prediction Analysis Section Styles */
+.prediction-container {
+    background-color: var(--primary-white);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.performance-summary {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: var(--light-gray);
+    border-radius: 6px;
+}
+
+.summary-stats {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.stat-label {
+    font-weight: 500;
+    color: var(--accent-orange);
+}
+
+.stat-value {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.bearing-predictions {
+    margin-bottom: 2rem;
+}
+
+.bearing-predictions h3 {
+    color: var(--accent-orange);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--accent-orange);
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.prediction-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.prediction-table th {
+    background-color: var(--light-gray);
+    padding: 0.8rem;
+    text-align: left;
+    font-weight: 600;
+    color: var(--accent-orange);
+}
+
+.prediction-table td {
+    padding: 0.8rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.accuracy-cell {
+    font-weight: 500;
+    color: #FFC107;
+}
+
+.low-accuracy {
+    color: #DC3545;
+}
+
+.high-accuracy {
+    color: #28A745;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .summary-stats {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .prediction-table {
+        font-size: 0.8rem;
+    }
+
+    .prediction-table th,
+    .prediction-table td {
+        padding: 0.6rem;
+    }
+}

@@ -1,0 +1,112 @@
+{
+    "set 1": {
+        "bearing 3": {
+            "failure_point_percentage": 99.81447124304268,
+            "channels": {
+                "channel 5": {
+                    "changes": {
+                        "magnitude": {
+                            "peak": 24.601051603186736,
+                            "mean": 394.75053201491335,
+                            "total_energy": 394.7505320149134
+                        },
+                        "frequency_bands": {
+                            "low_band_change": 195.0853075141126,
+                            "mid_band_change": 379.4803494815766,
+                            "high_band_change": 560.9519561182757
+                        }
+                    }
+                },
+                "channel 6": {
+                    "changes": {
+                        "magnitude": {
+                            "peak": 23.19427691828271,
+                            "mean": 335.82341989601525,
+                            "total_energy": 335.82341989601525
+                        },
+                        "frequency_bands": {
+                            "low_band_change": 256.3337427604329,
+                            "mid_band_change": 385.8742362362078,
+                            "high_band_change": 486.17397165112897
+                        }
+                    }
+                }
+            }
+        },
+        "bearing 4": {
+            "failure_point_percentage": 81.26159554730982,
+            "channels": {
+                "channel 7": {
+                    "changes": {
+                        "magnitude": {
+                            "peak": 23.781292940570264,
+                            "mean": 200.7678080785739,
+                            "total_energy": 200.7678080785739
+                        },
+                        "frequency_bands": {
+                            "low_band_change": 101.15507309300476,
+                            "mid_band_change": 349.62219277422327,
+                            "high_band_change": 211.40253846649807
+                        }
+                    }
+                },
+                "channel 8": {
+                    "changes": {
+                        "magnitude": {
+                            "peak": 20.812959179496545,
+                            "mean": 168.8558737778229,
+                            "total_energy": 168.8558737778229
+                        },
+                        "frequency_bands": {
+                            "low_band_change": 126.63630212881299,
+                            "mid_band_change": 304.672856246207,
+                            "high_band_change": 196.8326800653503
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "set 2": {
+        "bearing 1": {
+            "failure_point_percentage": 99.08536585365853,
+            "channels": {
+                "channel 1": {
+                    "changes": {
+                        "magnitude": {
+                            "peak": 246.15705461150333,
+                            "mean": 867.6373207820067,
+                            "total_energy": 867.6373207820067
+                        },
+                        "frequency_bands": {
+                            "low_band_change": 705.4950770959664,
+                            "mid_band_change": 1036.8102560578118,
+                            "high_band_change": 746.4018309512916
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "set 3": {
+        "bearing 3": {
+            "failure_point_percentage": 99.87349778621126,
+            "channels": {
+                "channel 3": {
+                    "changes": {
+                        "magnitude": {
+                            "peak": 490.74874841167906,
+                            "mean": 660.2952980219785,
+                            "total_energy": 660.2952980219786
+                        },
+                        "frequency_bands": {
+                            "low_band_change": 408.1574075536258,
+                            "mid_band_change": 754.5553164982252,
+                            "high_band_change": 891.1948909067045
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

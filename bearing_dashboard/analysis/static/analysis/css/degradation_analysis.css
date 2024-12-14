@@ -1,0 +1,88 @@
+/* Degradation Analysis Section Styles */
+
+/* Main container for analysis content */
+.analysis-container {
+    background-color: var(--primary-white);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Styles for each failure type section */
+.failure-type {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.failure-type:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+/* Heading styles */
+.failure-type h3 {
+    color: var(--accent-orange);
+    font-size: 1.4rem;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--accent-orange);
+}
+
+/* Individual analysis block styling */
+.analysis-block {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: var(--light-gray);
+    border-radius: 6px;
+}
+
+.analysis-block:last-child {
+    margin-bottom: 0;
+}
+
+/* Subheading styles */
+.analysis-block h4 {
+    color: var(--accent-orange);
+    font-size: 1.1rem;
+    margin: 0 0 0.8rem 0;
+    font-weight: 500;
+}
+
+/* Analysis text content */
+.analysis-block p {
+    margin: 0;
+    line-height: 1.6;
+    color: #444444;
+    font-size: 0.95rem;
+}
+
+/* Highlighted values within text */
+.analysis-block p strong {
+    color: var(--accent-orange);
+    font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .analysis-container {
+        padding: 1rem;
+    }
+
+    .failure-type h3 {
+        font-size: 1.2rem;
+    }
+
+    .analysis-block {
+        padding: 0.8rem;
+    }
+
+    .analysis-block h4 {
+        font-size: 1rem;
+    }
+
+    .analysis-block p {
+        font-size: 0.9rem;
+    }
+}

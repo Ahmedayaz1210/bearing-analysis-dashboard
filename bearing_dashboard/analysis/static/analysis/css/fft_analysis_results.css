@@ -1,0 +1,75 @@
+/* FFT Analysis Results styling */
+.json-container {
+    background-color: var(--primary-white);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.set-container {
+    margin-bottom: 2rem;
+}
+
+.set-container h3 {
+    color: var(--accent-orange);
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--accent-orange);
+    padding-bottom: 0.5rem;
+}
+
+.bearing-container {
+    margin-left: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: var(--light-gray);
+    border-radius: 6px;
+}
+
+.bearing-container h4 {
+    color: var(--accent-orange);
+    margin: 0 0 0.5rem 0;
+    font-size: 1.2rem;
+}
+
+.failure-point {
+    color: var(--alert-red);
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.channel-container {
+    margin-left: 1rem;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 6px;
+    margin-top: 1rem;
+}
+
+.channel-container h5 {
+    color: var(--accent-orange);
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+}
+
+.changes-data {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.magnitude-changes, .frequency-bands {
+    padding: 0.5rem;
+}
+
+.magnitude-changes h6, .frequency-bands h6 {
+    color: var(--accent-orange);
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+}
+
+.magnitude-changes p, .frequency-bands p {
+    margin: 0.3rem 0;
+    font-size: 0.9rem;
+    color: #666666;
+}
