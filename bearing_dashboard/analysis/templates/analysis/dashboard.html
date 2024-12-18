@@ -31,20 +31,26 @@
         </header>
         <!-- Raw Signals Section goes here -->
         <section class="dashboard-section full-width">
-            <h2>Raw Channel Signals - Failing Bearings</h2>
+            <h2 id="Raw_Signals_Plots">Raw Channel Signals - Failing Bearings</h2>
             <p class="section-description">
                 Time-domain plots showing the evolution of vibration patterns throughout each bearing's lifetime. As failures develop, these raw signals capture the increasing intensity and complexity of bearing vibrations, providing our first insight into the failure process.
             </p>
             <div class="plot-container">
                 {% for raw in content.raw %}
-                    {% include 'analysis/raw_signals/'|add:raw %}
+                    {% if raw.error %}
+                        <div class="error-message">
+                            {{ raw.error }}
+                        </div>
+                    {% else %}
+                        {% include 'analysis/raw_signals/'|add:raw %}
+                    {% endif %}
                 {% endfor %}
             </div>
         </section>
 
         <!-- FFT Analysis Section -->
         <section class="dashboard-section full-width">
-            <h2>Frequency Domain Analysis (FFT)</h2>
+            <h2 id="Frequency_Domain_Analysis_Plots">Frequency Domain Analysis (FFT)</h2>
             <p class="section-description">
                 Through Fast Fourier Transform analysis, we convert these complex time signals into clear frequency patterns. This transformation reveals specific frequency signatures associated with each type of bearing failure that help us identify and track different failure modes.
             </p>
@@ -57,11 +63,16 @@
 
         <!-- FFT Analysis Results Section -->
         <section class="dashboard-section full-width">
-            <h2>FFT Analysis Results</h2>
+            <h2 id="Frequency_Domain_Analysis_Result">FFT Analysis Results</h2>
             <p class="section-description">
                 Detailed examination of frequency components reveals how different types of bearing damage manifest in specific frequency bands. Inner race failures show distinct high-frequency patterns, roller element failures dominate mid-frequencies, and outer race failures display unique patterns across all bands.
             </p>
             <div class="json-container">
+                {% if content.bearing_analysis_results.error %}
+                    <div class="error-message">
+                        {{ content.bearing_analysis_results.error }}
+                    </div>
+                {% endif %}
                 {% for set_name, set_data in content.bearing_analysis_results.items %}
                     <div class="set-container">
                         <h3>{{ set_name|title }}</h3>
@@ -99,7 +110,7 @@
 
         <!-- Filtered Signal Plot Section -->
         <section class="dashboard-section full-width">
-            <h2>Filtered Signal Analysis</h2>
+            <h2 id="filtered_signals_plots">Filtered Signal Analysis</h2>
             <p class="section-description">
                 By isolating specific frequency bands, we can track how different aspects of bearing health evolve over time. These filtered signals highlight the progression of damage, from subtle early changes to clear indicators of impending failure.
             </p>
@@ -113,7 +124,7 @@
 
                 <!-- Degradation Analysis Section -->
         <section class="dashboard-section full-width">
-            <h2>Degradation Analysis Over Time</h2>
+            <h2 id="degradation_analysis">Degradation Analysis Over Time</h2>
             <p class="section-description">
                 Analysis of how bearing health deteriorates over time. Each failure type shows characteristic patterns - from the rapid progression of inner race failures to the more gradual development of outer race damage, giving us crucial insights for prediction.
             </p>
@@ -188,7 +199,7 @@
 
         <!-- Feature Correlation Matrix -->
         <section class="dashboard-section full-width">
-            <h2>Feature Correlation Matrix</h2>
+            <h2 id="correlation_matrix_png">Feature Correlation Matrix</h2>
             <p class="section-description">
                 Visualizing relationships between different vibration characteristics helps identify which features work together to signal bearing failure. Strong correlations between certain features, such as mid-band kurtosis and stability measures, provide insights into the most reliable indicators of bearing health, while negative correlations help us understand how different aspects of bearing behavior change in opposing ways during degradation.
             </p>
@@ -202,7 +213,7 @@
 
         <!-- Prediction Analysis Section -->
         <section class="dashboard-section full-width">
-            <h2>Failure Prediction Analysis</h2>
+            <h2 id="prediction_analysis_result">Failure Prediction Analysis</h2>
             <p class="section-description">
                 Building on our understanding of vibration patterns and degradation rates, we predict remaining useful life for each bearing. Our model achieves high accuracy in early stages while acknowledging the increasing complexity of predictions as bearings approach failure. These predictions provide valuable insights for maintenance planning and resource allocation.
             </p>
@@ -213,6 +224,11 @@
                     <h3>Overall Prediction Performance</h3>
                     <div class="summary-stats">
                         <div class="stat-item">
+                            {% if content.prediction_analysis.model_performance.error_message %}
+                                <div class="error-message">
+                                    {{ content.prediction_analysis.model_performance.error_message }}
+                                </div>
+                            {% endif %}
                             <span class="stat-label">Average Accuracy:</span>
                             <span class="stat-value">{{ content.prediction_analysis.model_performance.average_accuracy|floatformat:1 }}%</span>
                         </div>
@@ -262,7 +278,7 @@
 
         <!-- Final Plots from Modeling/Prediction Section -->
         <section class="dashboard-section full-width">
-            <h2>Prediction Plots</h2>
+            <h2 id="prediction_plots">Prediction Plots</h2>
             <h3>
                 Visualization of our prediction model's performance across different bearing types and failure stages, revealing both the strengths and limitations of our predictive capabilities as bearings progress toward failure.
             <div class="plot-container">
