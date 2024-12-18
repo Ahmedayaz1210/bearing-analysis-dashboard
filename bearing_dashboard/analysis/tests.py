@@ -6,13 +6,19 @@ import json
 from bs4 import BeautifulSoup
 import builtins
 
+# 1. Tests basic view response and status code
 @pytest.mark.django_db            
 def test_view(client):            
     url = ""  
     response = client.get(url)     
     assert response.status_code == 200  
 
+# 2. Tests if the required directories and files exist
+def test_required_plots_exist():
+    assert os.path.exists(os.path.join('analysis', 'static', 'analysis', 'images', 'feature_correlation_matrix.png')), "Missing correlation matrix plot"
 
+
+# 3. Tests dashboard error handling for invalid accuracy values
 @pytest.mark.django_db
 def test_dashboard_error_handling(client, monkeypatch):
     data_dir = os.path.join('analysis', 'static', 'analysis', 'data')
@@ -38,7 +44,8 @@ def test_dashboard_error_handling(client, monkeypatch):
 
     assert 'Invalid average accuracy percentage' in content, "Missing error message for invalid accuracy percentage"
     
-    
+
+# 4. Tests file system permission error handling
 @pytest.mark.django_db
 def test_file_system_permission_error(client, monkeypatch):
     """
@@ -58,7 +65,7 @@ def test_file_system_permission_error(client, monkeypatch):
     assert response.status_code == 200
     assert 'Error accessing bearing analysis data' in content, "Missing error message for file access error"
 
-
+# 5. Tests handling of missing plot files
 @pytest.mark.django_db
 def test_missing_plot_files_error(client, monkeypatch):
     """
@@ -79,29 +86,24 @@ def test_missing_plot_files_error(client, monkeypatch):
     assert 'No raw signals found' in content, "Missing error message for missing raw signal files"
 
 
-def test_required_json_files_exist():
+# 6. Fixture providing JSON file paths
+@pytest.fixture
+def json_file_paths():
     data_dir = os.path.join('analysis', 'static', 'analysis', 'data')
-    
-    prediction_path = os.path.join(data_dir, 'prediction_analysis.json')
-    bearing_path = os.path.join(data_dir, 'bearing_analysis_results.json')
-    
-    assert os.path.exists(prediction_path), f"File not found: {prediction_path}"
-    assert os.path.exists(bearing_path), f"File not found: {bearing_path}"
+    return {
+        'prediction': os.path.join(data_dir, 'prediction_analysis.json'),
+        'bearing': os.path.join(data_dir, 'bearing_analysis_results.json')
+    }
 
+# 7. Fixture loading prediction analysis data
+@pytest.fixture
+def prediction_analysis(json_file_paths):
+    with open(json_file_paths['prediction'], 'r') as f:
+        return json.load(f)
 
-def test_required_plots_exist():
-    assert os.path.exists(os.path.join('analysis', 'static', 'analysis', 'images', 'feature_correlation_matrix.png')), "Missing correlation matrix plot"
+# 8. Tests prediction analysis JSON content structure
+def test_prediction_analysis_content(prediction_analysis):
 
-
-
-
-def test_prediction_analysis_content():
-    data_dir = os.path.join('analysis', 'static', 'analysis', 'data')
-    prediction_path = os.path.join(data_dir, 'prediction_analysis.json')
-    
-    with open(prediction_path, 'r') as f:
-        prediction_analysis = json.load(f)
-    
     assert len(prediction_analysis) > 0, "File is empty"
 
     for mp_bp, mp_bp_data in prediction_analysis.items():
@@ -134,12 +136,14 @@ def test_prediction_analysis_content():
                                         assert prediction in ["actual_hours_remaining", "predicted_hours", "error_metrics"], f"Expected actual_hours_remaining, predicted_hours, or error_metrics, got: {prediction}"
 
 
-def test_bearing_analysis_result_content():
-    data_dir = os.path.join('analysis', 'static', 'analysis', 'data')
-    bearing_path = os.path.join(data_dir, 'bearing_analysis_results.json')
-    
-    with open(bearing_path, 'r') as f:
-        bearing_analysis = json.load(f)
+# 9. Fixture loading bearing analysis data  
+@pytest.fixture
+def bearing_analysis(json_file_paths):
+    with open(json_file_paths['bearing'], 'r') as f:
+        return json.load(f)
+
+# 10. Tests bearing analysis results content structure
+def test_bearing_analysis_result_content(bearing_analysis):
     
     assert len(bearing_analysis) > 0, "File is empty"
     assert all(f"set {i}" in bearing_analysis for i in [1, 2, 3]), "Missing required sets"
@@ -175,16 +179,11 @@ def test_bearing_analysis_result_content():
 
 
 
-
-def test_bearing_failure_signatures():
-    data_dir = os.path.join('analysis', 'static', 'analysis', 'data')
-    bearing_path = os.path.join(data_dir, 'bearing_analysis_results.json')
+# 11. Tests prediction degradation patterns
+def test_bearing_failure_signatures(bearing_analysis):
     
-    with open(bearing_path, 'r') as f:
-        data = json.load(f)
-
     # Inner Race Failure Analysis (Set 1, Bearing 3)
-    inner_race = data['set 1']['bearing 3']
+    inner_race = bearing_analysis['set 1']['bearing 3']
     inner_race_channels = inner_race['channels']
     
     # Inner race failures should show strongest high-frequency response
@@ -200,7 +199,7 @@ def test_bearing_failure_signatures():
             "Inner race channels should show balanced degradation"
 
     # Roller Element Analysis (Set 1, Bearing 4)
-    roller = data['set 1']['bearing 4']
+    roller = bearing_analysis['set 1']['bearing 4']
     roller_channels = roller['channels']
     
     # Roller failures show distinctive mid-frequency dominance
@@ -215,8 +214,8 @@ def test_bearing_failure_signatures():
 
     # Outer Race Analysis (Sets 2 and 3)
     outer_races = {
-        'set 2': data['set 2']['bearing 1'],
-        'set 3': data['set 3']['bearing 3']
+        'set 2': bearing_analysis['set 2']['bearing 1'],
+        'set 3': bearing_analysis['set 3']['bearing 3']
     }
     
     for set_name, outer_race in outer_races.items():
@@ -230,15 +229,14 @@ def test_bearing_failure_signatures():
         
         assert band_ratio > 0.4, \
             f"Outer race failure in {set_name} shows unexpected frequency distribution"
+        
 
-def test_prediction_degradation_patterns():
-    data_dir = os.path.join('analysis', 'static', 'analysis', 'data')
-    prediction_path = os.path.join(data_dir, 'prediction_analysis.json')
+
+# 12. Tests prediction degradation patterns
+def test_prediction_degradation_patterns(prediction_analysis):
     
-    with open(prediction_path, 'r') as f:
-        data = json.load(f)
 
-    predictions = data['bearing_predictions']
+    predictions = prediction_analysis['bearing_predictions']
     
     for bearing_type, bearing_data in predictions.items():
         timeline = bearing_data['timeline']
@@ -276,6 +274,28 @@ def test_prediction_degradation_patterns():
                 "Outer race should show stable mid-life predictions"
 
 
+# 13. Tests section IDs and titles in template
+@pytest.mark.django_db
+@pytest.mark.parametrize("section_id, expected_title", [
+    ("Raw_Signals_Plots", "Raw Channel Signals - Failing Bearings"),
+    ("Frequency_Domain_Analysis_Plots", "Frequency Domain Analysis (FFT)"),
+    ("Frequency_Domain_Analysis_Result", "FFT Analysis Results"),
+    ("filtered_signals_plots", "Filtered Signal Analysis"),
+    ("degradation_analysis", "Degradation Analysis Over Time"),
+    ("correlation_matrix_png", "Feature Correlation Matrix"),
+    ("prediction_analysis_result", "Failure Prediction Analysis"),
+    ("prediction_plots", "Prediction Plots"),
+])
+def test_section_ids(client, section_id, expected_title):
+    response = client.get('')
+    content = response.content.decode('utf-8')
+    scrape = BeautifulSoup(content, 'html.parser')
+    section = scrape.find('h2', {'id': section_id})
+    assert section, f"Missing section with ID: {section_id}"
+    assert section.text.strip() == expected_title, f"Wrong title for {section_id}. Expected '{expected_title}' but got '{section.text.strip()}'"
+
+
+# 14. Tests template rendering and structure
 @pytest.mark.django_db
 def test_template_rendering(client):
     response = client.get('')
@@ -286,22 +306,6 @@ def test_template_rendering(client):
     assert 'Vibration Analysis Dashboard' in content, "Missing Vibration Analysis Dashboard title"
 
     scrape = BeautifulSoup(content, 'html.parser')
-
-    section_info = {
-        "Raw_Signals_Plots": "Raw Channel Signals - Failing Bearings",
-        "Frequency_Domain_Analysis_Plots": "Frequency Domain Analysis (FFT)",
-        "Frequency_Domain_Analysis_Result": "FFT Analysis Results",
-        "filtered_signals_plots": "Filtered Signal Analysis",
-        "degradation_analysis": "Degradation Analysis Over Time",
-        "correlation_matrix_png": "Feature Correlation Matrix",
-        "prediction_analysis_result": "Failure Prediction Analysis",
-        "prediction_plots": "Prediction Plots"
-    }
-
-    for id, expected_title in section_info.items():
-        section = scrape.find('h2', {'id': id})
-        assert section, f"Missing section with ID: {id}"
-        assert section.text.strip() == expected_title, f"Wrong title for {id}. Expected '{expected_title}' but got '{section.text.strip()}'"
 
     prediction_elements = scrape.find('div', class_='prediction-container')
     performance = prediction_elements.find('div', class_='performance-summary')
@@ -326,6 +330,24 @@ def test_template_rendering(client):
             assert any(h.text.strip() == header for h in headers), f"Missing table header: {header}"
 
 
+# 15. Tests required sections exist in context
+@pytest.mark.django_db
+@pytest.mark.parametrize("required_section", [
+    'raw', 
+     'fft', 
+     'filtered_signals', 
+     'bearing_analysis_results', 
+     'prediction_analysis',
+])
+def test_required_sections_exist(client, required_section):
+    response = client.get('')
+    context = response.context
+    content = context['content']
+
+    assert required_section in content, f"Missing required section: {required_section}"
+
+
+# 16. Tests view context data processing and validation
 @pytest.mark.django_db
 def test_view_context_data(client):
     # Get the response and extract context
@@ -336,10 +358,6 @@ def test_view_context_data(client):
     assert 'content' in context, "Missing content in context"
     content = context['content']
 
-    # Verify all required sections are present in content
-    required_sections = ['raw', 'fft', 'filtered_signals', 'bearing_analysis_results', 'prediction_analysis']
-    for section in required_sections:
-        assert section in content, f"Missing {section} in content"
 
     # Test Bearing Analysis Results processing
     bearing_results = content['bearing_analysis_results']
