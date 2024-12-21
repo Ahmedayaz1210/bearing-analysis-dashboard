@@ -1,0 +1,10 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/app
+    environment:
+      - DEBUG=0
+      - DJANGO_SETTINGS_MODULE=bearing_dashboard.settings
