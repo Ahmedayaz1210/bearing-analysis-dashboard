@@ -26,6 +26,12 @@ COPY . .
 # Make our start script executable
 RUN chmod +x /app/start.sh
 
+# Create the static files directory
+RUN mkdir -p staticfiles
+
+# Collect static files
+RUN python manage.py collectstatic --noinput
+
 # Tell Docker what port we'll use
 EXPOSE 8000
 
