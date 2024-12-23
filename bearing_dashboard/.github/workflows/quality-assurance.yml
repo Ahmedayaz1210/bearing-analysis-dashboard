@@ -12,6 +12,11 @@ jobs:
         
         env:
             DJANGO_SETTINGS_MODULE: bearing_dashboard.settings
+            PYTHONPATH: /github/workspace/bearing_dashboard
+        
+        defaults:
+          run:
+            working-directory: bearing_dashboard
 
         steps:
             - uses: actions/checkout@v4
