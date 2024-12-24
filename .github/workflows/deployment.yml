@@ -13,7 +13,7 @@ env:
     ECR_REPOSITORY: vibration-analysis-dashboard
     ECS_SERVICE: vibration-analysis-service-2
     ECS_CLUSTER: vibration-analysis-cluster
-    ECS_TASK_DEFINITION: .aws/task-definition.json
+    ECS_TASK_DEFINITION: bearing_dashboard/.aws/task-definition.json
     CONTAINER_NAME: vibration-analysis-container
 
 jobs:
