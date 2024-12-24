@@ -20,6 +20,9 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: bearing_dashboard 
 
     steps:
       - name: Checkout
